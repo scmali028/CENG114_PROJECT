@@ -1,13 +1,37 @@
-uşak###uşak sorusu
-iran###petrol vardır
-ırak###el kaide nerede kuruldu
-elma###this covered red layer...
-sivas###58 plaka nerededir
-Syria###alinin memleket?
-armut###iyisini ayılar yer?
-Ankara###What Capital is Turkey...
-mardin###Malabadi köprüsü
-dereotu###Çam ağacına benzer
-istanbul###bizansın başkenti
-ingiltere###güneş batmayan ülke?
-Altınçilek###golden strawbery
+idea###a thought or plan
+time###what we measure with clocks
+life###the state of being alive
+hope###a feeling of wanting something good
+plan###a way to do something
+world###the earth and people on it
+money###what we use to buy things
+happy###feeling good and joyful
+learn###to get new knowledge
+peace###a state without war
+travel###to go to different places
+energy###power to do work
+memory###ability to remember
+nature###plants, animals and the earth
+future###time after now
+freedom###being able to act freely
+culture###ideas and traditions of people
+success###achieving a goal
+respect###polite behavior to others
+failure###not reaching a goal
+decision###a choice you make
+language###system of communication
+learning###the act of getting knowledge
+movement###change of position
+building###a structure people use
+education###process of learning
+technology###use of science
+experience###knowledge from life
+confidence###belief in yourself
+community###group of people
+responsible###having a duty
+environment###the world around us
+development###growth and change
+communication###sharing information
+imagination###ability to create ideas
+
+
