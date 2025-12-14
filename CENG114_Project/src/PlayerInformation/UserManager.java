@@ -14,22 +14,30 @@ import java.util.Scanner;
  * @author alise
  */
 public class UserManager {
-    
+
     private ArrayList<User> users = new ArrayList<>();
     private final String fileName = "users.txt";
 
     public UserManager() throws FileNotFoundException {
         loadFromFile();
     }
+// FILE OKUMA
 
-    // FILE OKUMA
-    private void loadFromFile() throws FileNotFoundException {
+    private void loadFromFile() {
 
-        try (Scanner sc = new Scanner(new File(fileName))) {
+        File file = new File(fileName);
 
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine();
-                String[] parts = line.split(" ");
+        // Dosya yoksa ilk çalışmada sorun değil
+        if (!file.exists()) {
+            return;
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+
+            String line;
+            while ((line = br.readLine()) != null) {
+
+                String[] parts = line.split("###");
 
                 users.add(new User(
                         parts[0],
@@ -38,9 +46,10 @@ public class UserManager {
                 ));
             }
 
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        // Dosya yoksa ilk çalışmada sorun değil
-            }
+    }
 
     // KULLANICI VAR MI? (recursive search olabilir ama şimdilik sade)
     public User findUser(String username) {
@@ -77,7 +86,7 @@ public class UserManager {
     }
 
     // DOSYAYA YAZ
-    public void saveToFile() {
+    /*  public void saveToFile() {
 
         try (PrintWriter pw = new PrintWriter(new FileWriter(fileName))) {
 
@@ -88,5 +97,21 @@ public class UserManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }*/
+// DOSYAYA YAZ
+    public void saveToFile() {
+
+        try (BufferedWriter bw
+                = new BufferedWriter(new FileWriter(fileName))) {
+
+            for (User u : users) {
+                bw.write(u.toString());
+                bw.newLine();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 }
