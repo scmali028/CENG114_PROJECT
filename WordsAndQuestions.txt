@@ -1,13 +1,15 @@
-uşak###uşak sorusu
-iran###petrol vardır
-ırak###el kaide nerede kuruldu
-elma###this covered red layer...
-sivas###58 plaka nerededir
-Syria###alinin memleket?
-armut###iyisini ayılar yer?
-Ankara###What Capital is Turkey...
-mardin###Malabadi köprüsü
-dereotu###Çam ağacına benzer
-istanbul###bizansın başkenti
-ingiltere###güneş batmayan ülke?
-Altınçilek###golden strawbery
+uşak###uşak sorusu###0
+iran###petrol vardır###0
+ırak###el kaide nerede kuruldu###0
+elma###this covered red layer...###0
+sivas###58 plaka nerededir###0
+Syria###alinin memleket?###0
+armut###iyisini ayılar yer?###0
+Ankara###What Capital is Turkey...###0
+mardin###Malabadi köprüsü###0
+dereotu###Çam ağacına benzer###0
+istanbul###bizansın başkenti###0
+ingiltere###güneş batmayan ülke?###0
+Altınçilek###golden strawbery###0
+ceng114###geçilmesi en kolay ders nedir###0
+

@@ -1,0 +1,3 @@
+NAME    SCORE    TIME 
+1.123 : 900.0 : 3
+2.yamur : 900.0 : 3
