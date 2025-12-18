@@ -4,11 +4,21 @@
  */
 package Main;
 
+import AdminProcess.AdminSystem;
+import GUI.MainMenuFrame;
+import Game.Admin;
+import Game.NormalPlayer;
 import LengthOfWords.*;
 import LengthOfWords.FourLettersWords;
 import LengthOfWords.FiveLettersWords;
 
-import Hangman.Player;
+import Game.Player;
+import PlayerInformation.AddQuestionFromUser;
+import PlayerInformation.ReaderAndWriterFileProcess;
+import PlayerInformation.RegisterAndSignIn;
+import PlayerInformation.Submit;
+import java.awt.Choice;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import userBehaviors.Estimating;
@@ -21,14 +31,22 @@ import userBehaviors.Taking;
 public class Presantation1Console {
 
     private static Scanner input = new Scanner(System.in);
-    private static ArrayList<AllWords> LengthOfWords = new ArrayList<>();
-    private static Player player;
+    private static ArrayList<AllWords> LengthOfWords = new ArrayList<>();// main menüde direk yükleyelim aradan çıksın 
+    private static Player normalPlayer;//cardPanelin registerında görevli olcak
+    private static Player adminPlayer;//  buda aynı şekil yuakrdakiyle
+    private static RegisterAndSignIn registerAndSignIn;// bunu yazdım zaten 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+     MainMenuFrame frame =   new MainMenuFrame();
+     frame.setVisible(true);
+     // mainMenu();
 
+    }
+
+    public static void mainMenu() throws IOException {
         loadCategories();
-        
-        
+      //  RegisterAndLoginMenu();
+
         createPlayer();
 
         boolean exit = false;
@@ -40,11 +58,68 @@ public class Presantation1Console {
             startNewQuestion(randomWord, questionIndex);
 
             exit = runQuestionLoop(questionIndex);
-            
+
         }
+        Submit sb = new Submit(normalPlayer);
+
+        sb.writeOnScoreboard();
+
+        System.out.println("do you wanna burda ana menü butonu olcak ");
+        mainMenu();
+
     }
 
-    
+    /*public static void RegisterAndLoginMenu() throws IOException {
+
+        registerAndSignIn = new RegisterAndSignIn(input);
+        boolean check = true;
+        while (check) {
+            System.out.println("""
+                0. Exit
+                1. Register
+                2. Sign In
+                """);
+
+            int choice = input.nextInt();
+
+            switch (choice) {
+                case 0:
+                    System.exit(0);
+                    break;
+
+                case 1: {
+                    if (registerAndSignIn.register()) {
+                        System.out.println("Register successful. Please sign in.");
+                    } else {
+                        System.out.println("Register failed.");
+                    }
+                    break;
+                }
+
+                case 2: {
+                    int result = registerAndSignIn.signIn();
+
+                    if (result == 1) {
+                        System.out.println("Giriş başarılı.");
+                        check = false;
+                        return;
+                    } else if (result == 0) {
+                        System.out.println("Yönetici modu.");
+                        adminPlayer = new Admin(registerAndSignIn.getUserName(), -1);
+                        check = false;
+                        return;
+                    } else {
+                        System.out.println("Giriş başarısız.");
+                    }
+                    break;
+                }
+
+                default:
+                    System.out.println("Geçersiz seçim.");
+            }
+        }
+    }*/
+
     public static void loadCategories() {
         LengthOfWords.add(new FourLettersWords());
         LengthOfWords.add(new FiveLettersWords());
@@ -55,43 +130,49 @@ public class Presantation1Console {
         LengthOfWords.add(new TenLettersWords());
     }
 
-    public static void createPlayer() {
-        System.out.println("enter name");
-        String name = input.nextLine();
+    public static void createPlayer() throws IOException {
+        //System.out.println("enter name");
+       // input.nextLine();
+        String name = registerAndSignIn.getUserName();
 
-        player = new Player(
-                name, // oyuncu adı
-                "", // ilk answer boş olacak
+        normalPlayer = new NormalPlayer(
+                name,
+                // oyuncu adı
+                
+                ReaderAndWriterFileProcess.getterLastIdFromFile(name),
                 new Taking(), // harf alma stratejisi
-                new Estimating() // kelime tahmin stratejisi
+                new Estimating()// kelime tahmin stratejisi
         );
-        player.getEngine().getPrintNoVisibleState();
-        
-        
-        player.displayName();
+        normalPlayer.getEngine().getPrintNoVisibleState();
+
+        normalPlayer.displayName();
 
     }
 
     public static void startNewQuestion(String word, int questionOrd) {
-        player.getEngine().setNewWord(word);
-        
+        normalPlayer.getEngine().setNewWord(word);
+
         System.out.println();
-        System.out.println(questionOrd+1 + ". Question");
+        System.out.println(questionOrd + 1 + ". Question");
     }
 
+    
+    
+    
+        // bura önemli baya 
     public static boolean runQuestionLoop(int lengthOfWordsIndex) {
 
         int howManyGotLetter = 0;
-                    //bura süre olucak 
-        while (player.getEngine().getLife() > 0) {
+        //bura süre olucak 
+        while (normalPlayer.getEngine().getLife() > 0) {
 
-            showQuestionInfo(lengthOfWordsIndex,howManyGotLetter);
-            player.getEngine().getPrintVisibleState();
-            //printCurrentArr(player.getEngine().getCurrent());// burdan current arr fonksiyonu yaz 
+            showQuestionInfo(lengthOfWordsIndex, howManyGotLetter);
+            normalPlayer.getEngine().getPrintVisibleState();
+            //printCurrentArr(normalPlayer.getEngine().getCurrent());// burdan current arr fonksiyonu yaz 
 
-            if (player.getEngine().isCompleted()) {
+            if (normalPlayer.getEngine().isCompleted()) {
                 System.out.println("Correct! Next Question.");
-                return false;  
+                return false;
             }
 
             int choice = askChoice();
@@ -101,7 +182,7 @@ public class Presantation1Console {
             switch (choice) {
 
                 case 1:
-                    player.getEngine().performTakingLetter();
+                    normalPlayer.getEngine().performTakingLetter();
                     howManyGotLetter++;
                     break;
 
@@ -109,14 +190,14 @@ public class Presantation1Console {
                     System.out.println("Please enter your guess: ");
                     String guess = input.nextLine();
 
-                    if (player.getEngine().performEstimate(guess)) {
+                    if (normalPlayer.getEngine().performEstimate(guess)) {
 
-                        player.getEngine().addScore(howManyGotLetter);
+                        normalPlayer.getEngine().addScore(howManyGotLetter);
                         System.out.println("correct");
                         return false;
                     } else {
                         System.out.println("Wrong answer! Try again.");
-                        player.getEngine().loseLife();
+                        normalPlayer.getEngine().loseLife();
                     }
                     break;
 
@@ -127,14 +208,19 @@ public class Presantation1Console {
 
         return false;
     }
-
-    public static void showQuestionInfo(int categoryIndex,int howManyGotLetter) {
+    
+    
+    // burda labellar kullancaz int döndürürler +"" ile bağlarsın     
+    public static void showQuestionInfo(int categoryIndex, int howManyGotLetter) {
         System.out.print(LengthOfWords.get(categoryIndex).getQuestion());
-        System.out.println("   Life(bu spnra süre olcak): " + player.getEngine().getLife());
-        System.out.println("                    alınabilcek score "+player.getEngine().getReachableScore(howManyGotLetter));
-        System.out.printf("                     Score: %.2f\n", player.getEngine().getScore());
+        System.out.println("   Life(bu spnra süre olcak): " + normalPlayer.getEngine().getLife());
+        System.out.println("                    alınabilcek score " + normalPlayer.getEngine().getReachableScore(howManyGotLetter));
+        System.out.printf("                     Score: %.2f\n", normalPlayer.getEngine().getScore());
     }
-
+    
+    
+    
+        // direk iptal bunu text fiedlarla faln yapcaz butonalrla faln
     public static int askChoice() {
         try {
             System.out.println("\nChoose one: "
